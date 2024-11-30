@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace A21ns1g4ts\FilamentShortUrl\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class FilamentShortUrlCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'filament-short-url';
 
     public $description = 'My command';
 

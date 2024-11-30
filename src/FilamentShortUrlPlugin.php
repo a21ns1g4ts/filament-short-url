@@ -1,15 +1,15 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace A21ns1g4ts\FilamentShortUrl;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class SkeletonPlugin implements Plugin
+class FilamentShortUrlPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'skeleton';
+        return 'filament-short-url';
     }
 
     public function register(Panel $panel): void
