@@ -2,6 +2,7 @@
 
 namespace A21ns1g4ts\FilamentShortUrl\Tests;
 
+use A21ns1g4ts\FilamentShortUrl\FilamentShortUrlServiceProvider;
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
 use Filament\Actions\ActionsServiceProvider;
@@ -16,7 +17,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
-use A21ns1g4ts\FilamentShortUrl\FilamentShortUrlServiceProvider;
 
 class TestCase extends Orchestra
 {
