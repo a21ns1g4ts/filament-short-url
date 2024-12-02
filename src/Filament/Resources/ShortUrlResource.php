@@ -120,7 +120,6 @@ class ShortUrlResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('destination_url')
                     ->copyable()
-                    ->copyableState(fn (string $state): string => "URL: {$state}")
                     ->limit(100)
                     ->color('primary')
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
@@ -136,7 +135,6 @@ class ShortUrlResource extends Resource
                 Tables\Columns\TextColumn::make('default_short_url')
                     ->copyable()
                     ->color('primary')
-                    ->copyableState(fn (string $state): string => "URL: {$state}")
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('visits_count')
