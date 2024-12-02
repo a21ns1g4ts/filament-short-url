@@ -2,6 +2,7 @@
 
 namespace A21ns1g4ts\FilamentShortUrl;
 
+use A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
@@ -14,7 +15,9 @@ class FilamentShortUrlPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        //
+        $panel->resources([
+            ShortUrlResource::class,
+        ]);
     }
 
     public function boot(Panel $panel): void
