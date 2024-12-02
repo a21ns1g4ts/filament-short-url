@@ -26,11 +26,11 @@ php artisan migrate
 ```
 
 ## Install for Panel
-
+```php
     ->plugins([
         \A21ns1g4ts\FilamentStripe\FilamentStripePlugin::make(),
     ])
-
+```
 ## Testing
 
 ```bash
