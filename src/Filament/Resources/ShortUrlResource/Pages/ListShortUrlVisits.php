@@ -21,7 +21,10 @@ class ListShortUrlVisits extends ManageRelatedRecords
 
     public function getTitle(): string | Htmlable
     {
-        return $this->getRecord()->default_short_url;
+        /* @var \AshAllenDesign\ShortURL\Models\ShortURL $record */
+        $record = $this->getRecord();
+
+        return isset($record->default_short_url) ? $record->default_short_url : 'Visits';
     }
 
     public function getBreadcrumb(): string

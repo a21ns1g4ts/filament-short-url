@@ -13,10 +13,10 @@ class ViewShortUrl extends ViewRecord
 
     public function getTitle(): string | Htmlable
     {
-        /** @var ShorUrl */
+        /* @var \AshAllenDesign\ShortURL\Models\ShortURL $record */
         $record = $this->getRecord();
 
-        return $record->default_short_url;
+        return $record->default_short_url ?? 'Unknown';
     }
 
     protected function getHeaderActions(): array
