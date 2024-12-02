@@ -25,6 +25,12 @@ php artisan vendor:publish --provider="AshAllenDesign\ShortURL\Providers\ShortUR
 php artisan migrate
 ```
 
+## Install for Panel
+
+    ->plugins([
+        \A21ns1g4ts\FilamentStripe\FilamentStripePlugin::make(),
+    ])
+
 ## Testing
 
 ```bash
