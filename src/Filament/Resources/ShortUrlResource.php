@@ -183,10 +183,10 @@ class ShortUrlResource extends Resource
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
                         if ($data['deactivated_at'] ?? null) {
-                            $indicators['deactivated_at'] = 'Activated from '.Carbon::parse($data['published_from'])->toFormattedDateString();
+                            $indicators['deactivated_at'] = 'Activated from ' . Carbon::parse($data['published_from'])->toFormattedDateString();
                         }
                         if ($data['deactivated_at'] ?? null) {
-                            $indicators['deactivated_at'] = 'Deactivated until '.Carbon::parse($data['deactivated_at'])->toFormattedDateString();
+                            $indicators['deactivated_at'] = 'Deactivated until ' . Carbon::parse($data['deactivated_at'])->toFormattedDateString();
                         }
 
                         return $indicators;

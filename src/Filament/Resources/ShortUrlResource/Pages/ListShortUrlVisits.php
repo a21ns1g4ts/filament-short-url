@@ -19,7 +19,7 @@ class ListShortUrlVisits extends ManageRelatedRecords
 
     protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
-    public function getTitle(): string|Htmlable
+    public function getTitle(): string | Htmlable
     {
         return $this->getRecord()->default_short_url;
     }
