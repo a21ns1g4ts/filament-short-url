@@ -225,6 +225,7 @@ class ShortUrlResource extends Resource
                                     Components\Group::make([
                                         Components\Group::make([
                                             Components\TextEntry::make('destination_url')
+                                                ->limit(50)
                                                 ->copyable()
                                                 ->color('primary'),
                                             Components\TextEntry::make('default_short_url')
