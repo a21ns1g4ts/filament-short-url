@@ -177,11 +177,11 @@ class ShortUrlResource extends Resource
                         return $query
                             ->when(
                                 $data['activated_at'] ?? null,
-                                fn(Builder $query, $date): Builder => $query->whereDate('activated_at', '>=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('activated_at', '>=', $date),
                             )
                             ->when(
                                 $data['deactivated_at'] ?? null,
-                                fn(Builder $query, $date): Builder => $query->whereDate('deactivated_at', '<=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('deactivated_at', '<=', $date),
                             );
                     })
                     ->indicateUsing(function (array $data): array {
@@ -236,7 +236,7 @@ class ShortUrlResource extends Resource
                                         Components\Group::make([
                                             Components\ImageEntry::make('destination_url')
                                                 ->label('QR Code')
-                                                ->state(fn() => self::getQrCode($infolist->getRecord()->default_short_url)),
+                                                ->state(fn () => self::getQrCode($infolist->getRecord()->default_short_url)),
                                         ]),
                                     ])->columnSpan(2),
                                     Components\Group::make([
