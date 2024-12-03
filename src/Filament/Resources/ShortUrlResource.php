@@ -5,6 +5,12 @@ namespace A21ns1g4ts\FilamentShortUrl\Filament\Resources;
 use A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource\Pages;
 use A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource\Widgets\ShortUrlStats;
 use AshAllenDesign\ShortURL\Models\ShortURL;
+use BaconQrCode\Renderer\Color\Rgb;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\Fill;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 use Filament\Forms;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Toggle;
@@ -120,7 +126,7 @@ class ShortUrlResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('destination_url')
                     ->copyable()
-                    ->limit(100)
+                    ->limit(50)
                     ->color('primary')
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
@@ -171,11 +177,11 @@ class ShortUrlResource extends Resource
                         return $query
                             ->when(
                                 $data['activated_at'] ?? null,
-                                fn (Builder $query, $date): Builder => $query->whereDate('activated_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('activated_at', '>=', $date),
                             )
                             ->when(
                                 $data['deactivated_at'] ?? null,
-                                fn (Builder $query, $date): Builder => $query->whereDate('deactivated_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('deactivated_at', '<=', $date),
                             );
                     })
                     ->indicateUsing(function (array $data): array {
@@ -212,8 +218,9 @@ class ShortUrlResource extends Resource
             ->schema([
                 Components\Section::make()
                     ->schema([
+                        Components\Group::make([]),
                         Components\Split::make([
-                            Components\Grid::make(3)
+                            Components\Grid::make(10)
                                 ->schema([
                                     Components\Group::make([
                                         Components\Group::make([
@@ -224,19 +231,26 @@ class ShortUrlResource extends Resource
                                                 ->copyable()
                                                 ->color('primary'),
                                         ]),
-                                    ]),
+                                    ])->columnSpan(4),
+                                    Components\Group::make([
+                                        Components\Group::make([
+                                            Components\ImageEntry::make('destination_url')
+                                                ->label('QR Code')
+                                                ->state(fn() => self::getQrCode($infolist->getRecord()->default_short_url)),
+                                        ]),
+                                    ])->columnSpan(2),
                                     Components\Group::make([
                                         Components\Group::make([
                                             Components\TextEntry::make('activated_at'),
                                             Components\TextEntry::make('deactivated_at'),
                                         ]),
-                                    ]),
+                                    ])->columnSpan(2),
                                     Components\Group::make([
                                         Components\Group::make([
                                             Components\TextEntry::make('created_at'),
                                             Components\TextEntry::make('updated_at'),
                                         ]),
-                                    ]),
+                                    ])->columnSpan(2),
                                 ]),
                         ])
                             ->from('lg'),
@@ -256,6 +270,22 @@ class ShortUrlResource extends Resource
                         ])->columns(5),
                     ]),
             ]);
+    }
+
+    public static function getQrCode(string $url)
+    {
+        $svg = (new Writer(
+            new ImageRenderer(
+                new RendererStyle(150, 1, null, null, Fill::uniformColor(new Rgb(255, 255, 255), new Rgb(45, 55, 72))),
+                new SvgImageBackEnd
+            )
+        ))->writeString($url);
+
+        $trimmed = trim(substr($svg, strpos($svg, "\n") + 1));
+
+        $url = 'data:image/svg+xml;base64,' . base64_encode($trimmed);
+
+        return $url;
     }
 
     public static function getRelations(): array
