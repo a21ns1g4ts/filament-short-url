@@ -37,7 +37,7 @@ class ShortUrlResource extends Resource
 
     public static function isScopedToTenant(): bool
     {
-        return false;
+        return config('filament-short-url.short_urls.tenant_scope', false);
     }
 
     public static function form(Form $form): Form
