@@ -1,7 +1,5 @@
 <?php
 
 return [
-    'short_urls' => [
-        'tenant_scope' => false,
-    ],
+    'tenant_scope' => false
 ];
