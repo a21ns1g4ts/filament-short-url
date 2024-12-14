@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'tenant_scope' => false
+    'tenant_scope' => false,
 ];
