@@ -2,13 +2,14 @@
 
 namespace A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource\Pages;
 
-use A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource;
+use Filament\Actions;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Resources\Pages\CreateRecord;
 use AshAllenDesign\ShortURL\Classes\Builder;
 use AshAllenDesign\ShortURL\Models\ShortURL;
-use Filament\Actions;
-use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
+use A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource;
 
 class CreateShortUrl extends CreateRecord
 {
@@ -20,7 +21,9 @@ class CreateShortUrl extends CreateRecord
             ->when($data['activated_at'], fn (Builder $builder) => $builder->activateAt(Carbon::parse($data['activated_at'])))
             ->when($data['deactivated_at'], fn (Builder $builder) => $builder->deactivateAt(Carbon::parse($data['deactivated_at'])))
             ->beforeCreate(function (ShortURL $model): void {
-                $model->company_id = auth()->user()->current_company_id;
+                if (Schema::hasColumn('short_urls', 'company_id')) {
+                    $model->company_id = auth()->user()->current_company_id;
+                }
             })
             ->make();
 
