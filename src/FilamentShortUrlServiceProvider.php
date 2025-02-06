@@ -137,8 +137,6 @@ class FilamentShortUrlServiceProvider extends PackageServiceProvider
      */
     protected function getMigrations(): array
     {
-        return [
-            'create_filament-short-url_table',
-        ];
+        return [];
     }
 }
