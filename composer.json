@@ -24,7 +24,7 @@
         "php": "^8.1",
         "ashallendesign/short-url": "^8.1",
         "bacon/bacon-qr-code": "^3.0",
-        "filament/filament": "^3.2",
+        "filament/filament": "^3.3",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
