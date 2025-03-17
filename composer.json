@@ -25,6 +25,7 @@
         "ashallendesign/short-url": "^8.1",
         "bacon/bacon-qr-code": "^3.0",
         "filament/filament": "^3.3",
+        "livewire/livewire": "^3.6",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
@@ -33,7 +34,8 @@
         "orchestra/testbench": "^9.0.0",
         "pestphp/pest": "^2.34",
         "pestphp/pest-plugin-arch": "^2.7",
-        "pestphp/pest-plugin-laravel": "^2.3"
+        "pestphp/pest-plugin-laravel": "^2.3",
+        "pestphp/pest-plugin-livewire": "^2.1"
     },
     "autoload": {
         "psr-4": {
