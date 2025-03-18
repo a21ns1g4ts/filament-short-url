@@ -124,6 +124,8 @@ class ShortUrlResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('destination_url')
                     ->copyable()
                     ->limit(50)
@@ -209,7 +211,8 @@ class ShortUrlResource extends Resource
                             ->warning()
                             ->send();
                     }),
-            ]);
+            ])
+            ->defaultSort('id', 'desc');
     }
 
     public static function infolist(Infolist $infolist): Infolist
