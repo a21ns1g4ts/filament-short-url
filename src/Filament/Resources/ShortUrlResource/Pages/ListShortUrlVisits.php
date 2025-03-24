@@ -66,6 +66,8 @@ class ListShortUrlVisits extends ManageRelatedRecords
         return $table
             ->recordTitleAttribute('id')
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('ip_address')
                     ->label('IP Address')
                     ->searchable()
@@ -111,6 +113,8 @@ class ListShortUrlVisits extends ManageRelatedRecords
             ])
             ->groupedBulkActions([
                 // Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ])
+            ->defaultSort('id', 'desc');
+
     }
 }
