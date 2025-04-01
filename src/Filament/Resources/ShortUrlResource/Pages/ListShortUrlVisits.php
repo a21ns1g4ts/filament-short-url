@@ -112,7 +112,7 @@ class ListShortUrlVisits extends ManageRelatedRecords
                 Tables\Actions\ViewAction::make(),
             ])
             ->groupedBulkActions([
-                // Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DeleteBulkAction::make(),
             ])
             ->defaultSort('id', 'desc');
 
