@@ -12,7 +12,6 @@ use BaconQrCode\Renderer\RendererStyle\Fill;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Filament\Forms;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Infolists\Components;
@@ -29,9 +28,15 @@ use Illuminate\Support\Carbon;
 
 class ShortUrlResource extends Resource
 {
+    protected static ?string $modelLabel = 'Short URL';
+
+    protected static ?string $pluralModelLabel = 'Short URLs';
+
+    protected static ?string $navigationBadgeColor = 'primary';
+
     protected static ?string $model = ShortURL::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-link';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
@@ -44,77 +49,80 @@ class ShortUrlResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make()
+                Forms\Components\Section::make('Informações do Link')
+                    ->description('Crie e gerencie seus links curtos')
+                    ->collapsible()
                     ->schema([
-                        Group::make()
-                            ->schema([
-                                Forms\Components\TextInput::make('destination_url')
-                                    ->required()
-                                    ->live()
-                                    ->maxLength(255)
-                                    ->url()
-                                    ->columnSpan(['lg' => 3, 'xs' => 6]),
-                                Forms\Components\TextInput::make('default_short_url')
-                                    ->readOnly()
-                                    ->maxLength(255)
-                                    ->columnSpan(['xl' => 2, 'xs' => 6]),
-                                Forms\Components\TextInput::make('url_key')
-                                    ->readOnly()
-                                    ->maxLength(255)
-                                    ->columnSpan(['xl' => 1, 'xs' => 6]),
+                        Forms\Components\TextInput::make('destination_url')
+                            ->required()
+                            ->live()
+                            ->maxLength(255)
+                            ->url()
+                            ->placeholder('https://exemplo.com/url-longa')
+                            ->columnSpan(['lg' => 3, 'xs' => 6])
+                            ->helperText('A URL original que será encurtada'),
+
+                        Forms\Components\TextInput::make('default_short_url')
+                            ->readOnly()
+                            ->maxLength(255)
+                            ->columnSpan(['xl' => 2, 'xs' => 6])
+                            ->suffixIcon('heroicon-o-clipboard')
+                            ->helperText('Clique para copiar'),
+
+                        Forms\Components\TextInput::make('url_key')
+                            ->readOnly()
+                            ->maxLength(255)
+                            ->columnSpan(['xl' => 1, 'xs' => 6])
+                            ->helperText('Identificador único'),
+                    ])
+                    ->columns(6)
+                    ->columnSpanFull(),
+
+                Forms\Components\Section::make('Configurações de Rastreamento')
+                    ->collapsible()
+                    ->schema([
+                        Forms\Components\ToggleButtons::make('tracking_options')
+                            ->inline()
+                            ->options([
+                                'basic' => 'Básico',
+                                'advanced' => 'Avançado',
+                                'none' => 'Nenhum',
                             ])
-                            ->columns(6)
-                            ->columnSpanFull(),
-                        Group::make()
+                            ->default('advanced')
+                            ->grouped()
+                            ->live(),
+
+                        Forms\Components\Fieldset::make('Opções Avançadas')
+                            ->hidden(fn (Forms\Get $get) => $get('tracking_options') === 'none')
                             ->schema([
-                                Toggle::make('single_use')
-                                    ->disabledOn('create')
-                                    ->columns(1),
-                                Toggle::make('forward_query_params')
-                                    ->disabledOn('create')
-                                    ->columns(1),
                                 Toggle::make('track_visits')
-                                    ->disabledOn('create')
                                     ->default(true)
-                                    ->columns(1),
-                                Toggle::make('track_ip_address')
-                                    ->disabledOn('create')
-                                    ->default(true)
-                                    ->columns(1),
-                                Toggle::make('track_operating_system')
-                                    ->disabledOn('create')
-                                    ->default(true)
-                                    ->columns(1),
-                                Toggle::make('track_operating_system_version')
-                                    ->disabledOn('create')
-                                    ->default(true)
-                                    ->columns(1),
-                                Toggle::make('track_browser')
-                                    ->disabledOn('create')
-                                    ->default(true)
-                                    ->columns(1),
-                                Toggle::make('track_browser_version')
-                                    ->disabledOn('create')
-                                    ->default(true)
-                                    ->columns(1),
-                                Toggle::make('track_referer_url')
-                                    ->disabledOn('create')
-                                    ->default(true)
-                                    ->columns(1),
-                                Toggle::make('track_device_type')
-                                    ->disabledOn('create')
-                                    ->default(true)
-                                    ->columns(1),
-                            ])
-                            ->columns(5)
-                            ->columnSpanFull(),
-                        Group::make()
-                            ->schema([
-                                Forms\Components\DateTimePicker::make('activated_at'),
-                                Forms\Components\DateTimePicker::make('deactivated_at'),
-                            ])
-                            ->columns(3)
-                            ->columnSpanFull(),
+                                    ->inline(false)
+                                    ->helperText('Registrar acessos ao link'),
+
+                                // Agrupar toggles relacionados
+                                Forms\Components\Grid::make(3)
+                                    ->schema([
+                                        Toggle::make('track_ip_address')
+                                            ->default(true)
+                                            ->inline(false),
+                                        Toggle::make('track_browser')
+                                            ->default(true)
+                                            ->inline(false),
+                                        Toggle::make('track_device_type')
+                                            ->default(true)
+                                            ->inline(false),
+                                    ]),
+                            ]),
+                    ]),
+
+                Forms\Components\Section::make('Ativação')
+                    ->collapsible()
+                    ->schema([
+                        Forms\Components\DateTimePicker::make('activated_at')
+                            ->helperText('Quando o link estará ativo'),
+                        Forms\Components\DateTimePicker::make('deactivated_at')
+                            ->helperText('Quando o link será desativado'),
                     ])
                     ->columns(2),
             ]);
