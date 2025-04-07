@@ -49,82 +49,57 @@ class ShortUrlResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Informações do Link')
-                    ->description('Crie e gerencie seus links curtos')
-                    ->collapsible()
+                Forms\Components\Section::make('URL Information')
+                    ->description('Create and manage your short links')
                     ->schema([
                         Forms\Components\TextInput::make('destination_url')
-                            ->required()
-                            ->live()
-                            ->maxLength(255)
-                            ->url()
-                            ->placeholder('https://exemplo.com/url-longa')
-                            ->columnSpan(['lg' => 3, 'xs' => 6])
-                            ->helperText('A URL original que será encurtada'),
+                            ->label('Destination URL')
+                            ->placeholder('https://example.com/long-url')
+                            ->helperText('The original URL to be shortened'),
 
                         Forms\Components\TextInput::make('default_short_url')
-                            ->readOnly()
-                            ->maxLength(255)
-                            ->columnSpan(['xl' => 2, 'xs' => 6])
-                            ->suffixIcon('heroicon-o-clipboard')
-                            ->helperText('Clique para copiar'),
+                            ->label('Short URL')
+                            ->helperText('Click to copy'),
 
                         Forms\Components\TextInput::make('url_key')
-                            ->readOnly()
-                            ->maxLength(255)
-                            ->columnSpan(['xl' => 1, 'xs' => 6])
-                            ->helperText('Identificador único'),
-                    ])
-                    ->columns(6)
-                    ->columnSpanFull(),
+                            ->label('URL Key')
+                            ->helperText('Unique identifier'),
+                    ]),
 
-                Forms\Components\Section::make('Configurações de Rastreamento')
-                    ->collapsible()
+                Forms\Components\Section::make('Tracking Settings')
                     ->schema([
-                        Forms\Components\ToggleButtons::make('tracking_options')
-                            ->inline()
+                        Forms\Components\ToggleButtons::make('tracking_level')
+                            ->label('Tracking Level')
                             ->options([
-                                'basic' => 'Básico',
-                                'advanced' => 'Avançado',
-                                'none' => 'Nenhum',
-                            ])
-                            ->default('advanced')
-                            ->grouped()
-                            ->live(),
+                                'basic' => 'Basic',
+                                'advanced' => 'Advanced',
+                                'none' => 'None',
+                            ]),
 
-                        Forms\Components\Fieldset::make('Opções Avançadas')
-                            ->hidden(fn (Forms\Get $get) => $get('tracking_options') === 'none')
+                        Forms\Components\Fieldset::make('Advanced Options')
                             ->schema([
                                 Toggle::make('track_visits')
-                                    ->default(true)
-                                    ->inline(false)
-                                    ->helperText('Registrar acessos ao link'),
+                                    ->label('Track Visits')
+                                    ->helperText('Record link accesses'),
 
-                                // Agrupar toggles relacionados
-                                Forms\Components\Grid::make(3)
-                                    ->schema([
-                                        Toggle::make('track_ip_address')
-                                            ->default(true)
-                                            ->inline(false),
-                                        Toggle::make('track_browser')
-                                            ->default(true)
-                                            ->inline(false),
-                                        Toggle::make('track_device_type')
-                                            ->default(true)
-                                            ->inline(false),
-                                    ]),
+                                Toggle::make('track_ip_address')
+                                    ->label('Track IP Address'),
+
+                                Toggle::make('track_browser')
+                                    ->label('Track Browser'),
                             ]),
                     ]),
 
-                Forms\Components\Section::make('Ativação')
-                    ->collapsible()
+                Forms\Components\Section::make('Activation Period')
                     ->schema([
                         Forms\Components\DateTimePicker::make('activated_at')
-                            ->helperText('Quando o link estará ativo'),
+                            ->label('Activation Date')
+                            ->helperText('When the link becomes active'),
+
                         Forms\Components\DateTimePicker::make('deactivated_at')
-                            ->helperText('Quando o link será desativado'),
-                    ])
-                    ->columns(2),
+                            ->label('Expiration Date')
+                            ->helperText('When the link will deactivate'),
+                    ]),
             ]);
     }
 
