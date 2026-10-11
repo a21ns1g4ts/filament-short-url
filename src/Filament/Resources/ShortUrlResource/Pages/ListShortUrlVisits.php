@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource\Pages;
 
 use A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ManageRelatedRecords;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,14 +21,14 @@ class ListShortUrlVisits extends ManageRelatedRecords
 
     protected static string $relationship = 'visits';
 
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-list-bullet';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar';
 
     public function getTitle(): string | Htmlable
     {
         /* @var \AshAllenDesign\ShortURL\Models\ShortURL $record */
         $record = $this->getRecord();
 
-        return isset($record->default_short_url) ? $record->default_short_url : 'Visits';
+        return ($record->default_short_url ?? 'Short URL') . ' - Visits';
     }
 
     public function getBreadcrumb(): string
@@ -50,18 +51,21 @@ class ListShortUrlVisits extends ManageRelatedRecords
     public function infolist(Schema $schema): Schema
     {
         return $schema
-            ->columns(1)
             ->schema([
-                TextEntry::make('short_url_id'),
-                TextEntry::make('ip_address'),
-                TextEntry::make('operating_system'),
-                TextEntry::make('operating_system_version'),
-                TextEntry::make('browser'),
-                TextEntry::make('browser_version'),
-                TextEntry::make('visited_at'),
-                TextEntry::make('referer_url'),
-                TextEntry::make('device_type'),
-            ])->columns(5);
+                Section::make('Visit Details')
+                    ->schema([
+                        TextEntry::make('id')->label('Visit ID'),
+                        TextEntry::make('ip_address')->label('IP Address'),
+                        TextEntry::make('visited_at')->label('Visited At')->dateTime('d/m/Y H:i:s'),
+                        TextEntry::make('device_type')->label('Device Type')->badge(),
+                        TextEntry::make('operating_system')->label('Operating System'),
+                        TextEntry::make('operating_system_version')->label('OS Version'),
+                        TextEntry::make('browser')->label('Browser'),
+                        TextEntry::make('browser_version')->label('Browser Version'),
+                        TextEntry::make('referer_url')->label('Referrer URL')->columnSpanFull(),
+                    ])
+                    ->columns(4),
+            ]);
     }
 
     public function table(Table $table): Table
@@ -70,46 +74,36 @@ class ListShortUrlVisits extends ManageRelatedRecords
             ->recordTitleAttribute('id')
             ->columns([
                 Tables\Columns\TextColumn::make('id')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('visited_at')
+                    ->label('Visited At')
+                    ->dateTime('d/m/Y H:i:s')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ip_address')
                     ->label('IP Address')
                     ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('visited_at')
-                    ->label('Visited At')
-                    ->dateTime('M j, Y H:i')
+                    ->sortable()
+                    ->copyable(),
+                Tables\Columns\TextColumn::make('device_type')
+                    ->label('Device')
+                    ->badge()
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('operating_system')
                     ->label('OS')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('operating_system_version')
-                    ->label('OS Version')
-                    ->searchable()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('browser')
                     ->label('Browser')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('browser_version')
-                    ->label('Browser Version')
-                    ->searchable()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('referer_url')
-                    ->label('Referer URL')
+                    ->label('Referrer URL')
+                    ->limit(40)
                     ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('device_type')
-                    ->label('Device Type')
-                    ->searchable()
-                    ->sortable(),
-            ])
-            ->filters([
-                //
-            ])
-            ->headerActions([
-                // Tables\Actions\CreateAction::make(),
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->actions([
                 ViewAction::make(),
@@ -118,6 +112,5 @@ class ListShortUrlVisits extends ManageRelatedRecords
                 DeleteBulkAction::make(),
             ])
             ->defaultSort('id', 'desc');
-
     }
 }

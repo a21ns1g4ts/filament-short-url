@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource\Pages;
 
 use A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource;
@@ -16,16 +18,14 @@ class EditShortUrl extends EditRecord
         /* @var \AshAllenDesign\ShortURL\Models\ShortURL $record */
         $record = $this->getRecord();
 
-        return $record->default_short_url ?? 'Unknown';
+        return $record->default_short_url ?? 'Edit Short URL';
     }
 
     protected function getHeaderActions(): array
     {
         return [
+            Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
-            Actions\Action::make('create')
-                ->label('New')
-                ->url(CreateShortUrl::getUrl()),
         ];
     }
 }
