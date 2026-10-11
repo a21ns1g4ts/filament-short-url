@@ -3,6 +3,7 @@
 namespace Tests\Filament\Resources;
 
 use A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource;
+use A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource\Widgets\ShortUrlStats;
 use AshAllenDesign\ShortURL\Models\ShortURL;
 
 beforeEach(function () {
@@ -24,7 +25,7 @@ it('has correct navigation items', function () {
 it('has correct widgets', function () {
     $widgets = ShortUrlResource::getWidgets();
 
-    expect($widgets)->toContain(\A21ns1g4ts\FilamentShortUrl\Filament\Resources\ShortUrlResource\Widgets\ShortUrlStats::class);
+    expect($widgets)->toContain(ShortUrlStats::class);
 });
 
 it('respects tenant scope configuration', function () {
